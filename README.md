@@ -9,5 +9,7 @@ TODO
 3. Picture and description of ER-diagram/database
 
   Will add more things as project goes on!
-
 -->
+
+## Purpose
+The purpose of this web app is to create an easy to understand interface for patients to book appointments with dentists in Gothenburg.
