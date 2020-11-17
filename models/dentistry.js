@@ -1,49 +1,45 @@
 var mongoose = require('mongoose');
-const dentistrySchema = new Schema({
-    coordinate:{
-        unique: true,
-        required: true,
-        longitude: {
-            type:Number,
-            required:true},
-        latitude: {
-            type:Number,
-            required:true}
-    },
-    address: { 
-        type:String,
-        required:true
-    },
-    name:{ 
-        type:String,
-        required:true,
-        unique: true
-    },
-    city:{
-        type:String,
-        required:true,
-    },
-    owner:{
-        type:String,
-        required:true,
-    },
-    phone:{
-        type:Number,
-        required:true,
-    },
-    openinghours: {
-        required:true,
-        monday:{
-            starttime: Date,
-            endtime: Date},
-        tuesday:{starttime: Date,
-            endtime: Date},
-        wednesday:{starttime: Date,
-            endtime: Date},
-        thursday:{starttime: Date,
-            endtime: Date},
-        friday:{starttime: Date,
-            endtime: Date}
-    }
-})
+
+
+var Schema = mongoose.Schema;
+
+var dentistrySchema = new Schema({
+
+    name   : {type: String, required: true, unique: true},
+    adress : {type: String, required: true, unique: true},
+    owner  : {type: String, required: true, unique: true},
+    city   : {type: String, required: true, unique: true},
+
+    coordinates : ({
+
+        longitude : {type: Number, required: true},
+        latitude  : {type: Number, required: true}
+
+    }),
+
+    opening_hours : ({
+
+        monday    : ({
+            start : {type: Number, required: true},
+            end   : {type: Number, required: true}
+        }),
+        tuesday   : ({
+            start : {type: Number, required: true},
+            end   : {type: Number, required: true}
+        }),
+        wednesday : ({
+            start : {type: Number, required: true},
+            end   : {type: Number, required: true}
+        }),
+        thursday  : ({
+            start : {type: Number, required: true},
+            end   : {type: Number, required: true}
+        }),
+        friday    : ({
+            start : {type: Number, required: true},
+            end   : {type: Number, required: true}
+        })
+    })
+});
+
 module.exports = mongoose.model('dentistries', dentistrySchema);
