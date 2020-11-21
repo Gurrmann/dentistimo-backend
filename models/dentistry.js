@@ -6,9 +6,10 @@ var Schema = mongoose.Schema;
 var dentistrySchema = new Schema({
 
     name   : {type: String, required: true, unique: true},
-    adress : {type: String, required: true, unique: true},
-    owner  : {type: String, required: true, unique: true},
-    city   : {type: String, required: true, unique: true},
+    adress : {type: String, required: true},
+    owner  : {type: String, required: true},
+    city   : {type: String, required: true},
+    dentists : {type: Number, required: true},
 
     coordinates : ({
 
@@ -19,26 +20,12 @@ var dentistrySchema = new Schema({
 
     opening_hours : ({
 
-        monday    : ({
-            start : {type: Number, required: true},
-            end   : {type: Number, required: true}
-        }),
-        tuesday   : ({
-            start : {type: Number, required: true},
-            end   : {type: Number, required: true}
-        }),
-        wednesday : ({
-            start : {type: Number, required: true},
-            end   : {type: Number, required: true}
-        }),
-        thursday  : ({
-            start : {type: Number, required: true},
-            end   : {type: Number, required: true}
-        }),
-        friday    : ({
-            start : {type: Number, required: true},
-            end   : {type: Number, required: true}
-        })
+        monday   : {type: String, required: true},
+        tuesday   : {type: String, required: true},
+        wednesday  : {type: String, required: true},
+        thursday  : {type: String, required: true},
+        friday  : {type: String, required: true}
+
     })
 });
 
