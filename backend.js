@@ -1,36 +1,11 @@
-//Load HTTP module
-/*const http = require("http");
-const hostname = '127.0.0.1';
-const port = 3000;*/
-
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/dentistimoDB')
 var db = mongoose.connection;
 
-//Create HTTP server and listen on port 3000 for requests
-/*const server = http.createServer((req, res) => {
-
-  //Set the response HTTP header with HTTP status and Content type
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('test');
-});
-
-//listen for request on port 3000, and as a callback function have the port listened on logged
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});*/
-
 var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://test.mosquitto.org')
-var dentistry = require('./models/dentistry')
-
-/* dentistry.find({}, function (err, result) {
-  if (err) return handleError(err);
-  if (result) {
-      message = result[0].name
-  }
-}) */
+//var client  = mqtt.connect('mqtt://test.mosquitto.org')
+var client  = mqtt.connect('mqtt://localhost:1883')
+var Dentistry = require('./models/dentistry')
 
 client.on('connect', function () {
   client.subscribe('dentistry')
@@ -49,3 +24,24 @@ function publish(topic, message) {
 }
 
 //client.end()
+
+readDentistries()
+
+function createDentistry(data){
+  var dentistry = new Dentistry(data)
+  dentistry.save(function(err, result){
+    if(err){
+      console.log(err)
+    }
+  })
+}
+
+function readDentistries(){
+  Dentistry.find(function(err, result){
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(result)
+    }
+  })
+}
