@@ -8,8 +8,15 @@ var client  = mqtt.connect('mqtt://localhost:1883')
 var Dentistry = require('./models/dentistry')
 
 client.on('connect', function () {
-  client.subscribe('dentistry')
-  publish('dentistry', '{"msg": "Hello internet"}')
+  setInterval(function () {
+    Dentistry.find(function(err, result){
+      if (err) {
+        console.log(err)
+      } else {
+        result = JSON.stringify(result)
+        client.publish('dentistries', result)
+      }
+    })}, 1500)
 })
 
 client.on('message', function (topic, message) {
