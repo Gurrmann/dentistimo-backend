@@ -13,6 +13,7 @@ var Dentistry = require('./models/dentistry')
 client.on('connect', function () {
   
   setInterval(function () {
+    client.subscribe('dentistries')
     Dentistry.find(function(err, result){
       if (err) {
         console.log(err)
@@ -57,10 +58,17 @@ function readDentistries(){
   })
 }
 
-/*setInterval(function() {
-  $.getJSON('https://raw.githubusercontent.com/feldob/dit355_2020/master/dentists.json', function(data) {
-    data.dentists.forEach(el => {
-      createDentistry(el)
-    })
-  })
-}, 60000) // 1 min*/
+setInterval(function() {
+  Dentistry.deleteMany({}, function (err) {
+    if(err){
+        console.log(err)
+      } 
+      else {
+        $.getJSON('https://raw.githubusercontent.com/feldob/dit355_2020/master/dentists.json', function(data) {
+          data.dentists.forEach(el => {
+            createDentistry(el)
+          })
+        })
+      }
+   })
+}, 60000) // 1 min
