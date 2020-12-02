@@ -7,7 +7,7 @@ const $ = require( "jquery" )( window );
 
 var mqtt = require('mqtt')
 //var client  = mqtt.connect('mqtt://test.mosquitto.org')
-var client  = mqtt.connect('mqtt://localhost:1883')
+var client  = mqtt.connect('mqtt://test.mosquitto.org')
 var Dentistry = require('./models/dentistry')
 
 client.on('connect', function () {
