@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/dentistimoDB')
-var db = mongoose.connection;
 const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
@@ -28,32 +27,17 @@ client.on('message', function (topic, message) {
   // message is Buffer
   message = JSON.parse(message)
   console.log(message)
-  //client.end()
 })
 
 function publish(topic, message) {
   client.publish(topic, message)
 }
 
-//client.end()
-
-//readDentistries()
-
 function createDentistry(data){
   var dentistry = new Dentistry(data)
   dentistry.save(function(err, result){
     if(err){
       console.log(err)
-    }
-  })
-}
-
-function readDentistries(){
-  Dentistry.find(function(err, result){
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(result)
     }
   })
 }
