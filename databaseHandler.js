@@ -7,8 +7,8 @@ const $ = require( "jquery" )( window )
 // Can compare objects
 const isEqual = require('lodash.isequal')
 var mqtt = require('mqtt')
-//var client  = mqtt.connect('mqtt://test.mosquitto.org')
-var client  = mqtt.connect('mqtt://localhost:1883') // For local tesitng
+var client  = mqtt.connect('mqtt://test.mosquitto.org')
+//var client  = mqtt.connect('mqtt://localhost:1883') // For local tesitng
 var Dentistry = require('./models/dentistry')
 
 var options = {
