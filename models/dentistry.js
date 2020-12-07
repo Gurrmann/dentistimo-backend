@@ -7,10 +7,10 @@ var dentistrySchema = new Schema({
 
     id          : {type: Number, required: true, unique: true},
     name        : {type: String, required: true, unique: true},
-    address     : {type: String, required: true},
     owner       : {type: String, required: true},
-    city        : {type: String, required: true},
     dentists    : {type: Number, required: true},
+    address     : {type: String, required: true},
+    city        : {type: String, required: true},
     coordinate  : ({
         longitude : {type: Number, required: true},
         latitude  : {type: Number, required: true}
