@@ -8,7 +8,7 @@ const $ = require( "jquery" )( window )
 const isEqual = require('lodash.isequal')
 var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://test.mosquitto.org')
-//var client  = mqtt.connect('mqtt://localhost:1883') // For local tesitng
+//var client  = mqtt.connect('mqtt://localhost:1883') // For local testing
 var Dentistry = require('./models/dentistry')
 
 var options = {
@@ -69,7 +69,7 @@ setInterval(function() {
               data.dentists.forEach(el => {
                 createDentistry(el)
               })
-              client.publish('dentistries', result, options)
+              client.publish('dentistries', data.dentists, options)
             }
           })
           console.log('changed')
