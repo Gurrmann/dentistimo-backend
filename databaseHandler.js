@@ -37,7 +37,7 @@ client.on('message', function (topic, message) {
   } else {
     message = JSON.parse(message)
     message.forEach(msg => {
-      console.log(msg)   // Prints names only, saves space in terminal
+      console.log(msg.name)   // Prints names only, saves space in terminal
     })
   }
 })
@@ -86,7 +86,7 @@ setInterval(function() {
       }
     })
   })
-}, 5000) // 10 min 600000
+}, 600000) // 10 min
 
 function publishDentistries(message) {
   // add appointments as a list for each dentistry. filter etc
