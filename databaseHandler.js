@@ -11,29 +11,35 @@ var client  = mqtt.connect('mqtt://test.mosquitto.org')
 //var client  = mqtt.connect('mqtt://localhost:1883') // For local testing
 var Dentistry = require('./models/dentistry')
 
+var appointments = []
+
 var options = {
   retain: true  // Saves the latest message in the broker,
 }               // subscribers instantly get the saved message on subscribe
 
 client.on('connect', function () {
-
-  Dentistry.find(function(err, result){ // Publishes once on connect
-    if (err) {
-      console.log(err)
-    } else {
-      result = JSON.stringify(result)
-      client.publish('dentistries', result, options)
-    }
-  })
   client.subscribe('dentistries')
+  client.subscribe('appointments')
 })
 
 client.on('message', function (topic, message) {
   // message is Buffer
-  message = JSON.parse(message)
-  message.forEach(msg => {
-    console.log(msg.name)   // Prints names only, saves space in terminal
-  })
+  if (topic === 'appointments') {
+    appointments = JSON.parse(message) // Save appointments
+    Dentistry.find(function(err, result){ // Publishes when new appointment data arrives
+      if (err) {
+        console.log(err)
+      } else {
+        result = JSON.parse(JSON.stringify(result)) // Convert mongoose.Document to json
+        publishDentistries(result)
+      }
+    })
+  } else {
+    message = JSON.parse(message)
+    message.forEach(msg => {
+      console.log(msg.name)   // Prints names only, saves space in terminal
+    })
+  }
 })
 
 function createDentistry(data){
@@ -69,7 +75,8 @@ setInterval(function() {
               data.dentists.forEach(el => {
                 createDentistry(el)
               })
-              client.publish('dentistries', data.dentists, options)
+              // to string
+              publishDentistries(data.dentists)
             }
           })
           console.log('changed')
@@ -80,3 +87,13 @@ setInterval(function() {
     })
   })
 }, 600000) // 10 min
+
+function publishDentistries(message) {
+  // add appointments as a list for each dentistry. filter etc
+  message.forEach(element => {
+    element.appointments = appointments.filter(appointment => appointment.dentistry === element.id)
+  });
+
+  message = JSON.stringify(message)
+  client.publish('dentistries', message, options)
+}
