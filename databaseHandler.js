@@ -11,6 +11,24 @@ var client  = mqtt.connect('mqtt://broker.hivemq.com')
 //var client  = mqtt.connect('mqtt://localhost:1883') // For local testing
 var Dentistry = require('./models/dentistry')
 
+process.on('exit', exitHandler.bind(null));
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+
+function exitHandler(options, exitCode) {
+  if (options.exit){ 
+    client.unsubscribe('appointments')
+    client.unsubscribe('dentistries')
+    console.log("client unsubscribed")
+    client.end()
+    console.log("client ended")
+
+    process.exit()
+  }
+}
+
 var appointments = []
 
 var options = {
