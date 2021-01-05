@@ -31,9 +31,10 @@ function exitHandler(options, exitCode) {
 
 var appointments = []
 
-var options = {
-  retain: true  // Saves the latest message in the broker,
-}               // subscribers instantly get the saved message on subscribe
+var options = { // Saves the latest message in the broker,
+  retain: true, // subscribers instantly get the saved message on subscribe
+  qos: 0
+}
 
 client.on('connect', function () {
   client.subscribe('dentistries')
@@ -49,7 +50,7 @@ client.on('message', function (topic, message) {
         console.log(err)
       } else {
         result = JSON.parse(JSON.stringify(result)) // Convert mongoose.Document to json
-        publishDentistries(result)
+        publishDentistries(result, 0) // qos 0 because it receives on a 2 sec interval
       }
     })
   } else {
@@ -93,9 +94,8 @@ setInterval(function() {
               data.dentists.forEach(el => {
                 createDentistry(el)
               })
-              // to string
-              publishDentistries(data.dentists)
-            }
+              publishDentistries(data.dentists, 1) // qos 1 because the new data MUST be updated within 10 min
+            }                                      // data can be sent multiple times e.g. no qos 2
           })
           console.log('changed')
         } else {
@@ -106,7 +106,10 @@ setInterval(function() {
   })
 }, 600000) // 10 min
 
-function publishDentistries(message) {
+function publishDentistries(message, qos) {
+  
+  options.qos = qos // update qos to 0 or 1
+
   // add appointments as a list for each dentistry. filter etc
   message.forEach(element => {
     element.appointments = appointments.filter(appointment => appointment.dentistry === element.id)
