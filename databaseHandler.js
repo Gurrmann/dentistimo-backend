@@ -7,8 +7,8 @@ const $ = require( "jquery" )( window )
 // Can compare objects
 const isEqual = require('lodash.isequal')
 var mqtt = require('mqtt')
-//var client  = mqtt.connect('mqtt://broker.hivemq.com')
-var client  = mqtt.connect('mqtt://localhost:1883') // For local testing
+var client  = mqtt.connect('mqtt://broker.hivemq.com')
+//var client  = mqtt.connect('mqtt://localhost:1883') // For local testing
 var Dentistry = require('./models/dentistry')
 
 process.on('exit', exitHandler.bind(null));
@@ -32,7 +32,7 @@ function exitHandler(options, exitCode) {
 var appointments = []
 
 var options = { // Saves the latest message in the broker,
-  retain: true,  // subscribers instantly get the saved message on subscribe
+  retain: true, // subscribers instantly get the saved message on subscribe
   qos: 0
 }
 
@@ -50,7 +50,7 @@ client.on('message', function (topic, message) {
         console.log(err)
       } else {
         result = JSON.parse(JSON.stringify(result)) // Convert mongoose.Document to json
-        publishDentistries(result, 0)
+        publishDentistries(result, 0) // qos 0 because it receives on a 2 sec interval
       }
     })
   } else {
@@ -94,8 +94,8 @@ setInterval(function() {
               data.dentists.forEach(el => {
                 createDentistry(el)
               })
-              publishDentistries(data.dentists, 1)
-            }
+              publishDentistries(data.dentists, 1) // qos 1 because the new data MUST be updated within 10 min
+            }                                      // data can be sent multiple times e.g. no qos 2
           })
           console.log('changed')
         } else {
@@ -104,11 +104,11 @@ setInterval(function() {
       }
     })
   })
-}, 5000) // 10 min
+}, 600000) // 10 min
 
 function publishDentistries(message, qos) {
   
-  options.qos = qos
+  options.qos = qos // update qos to 0 or 1
 
   // add appointments as a list for each dentistry. filter etc
   message.forEach(element => {
