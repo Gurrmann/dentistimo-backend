@@ -3,7 +3,7 @@
 ## Installation Guide
 Step 1. After cloning this repository, navigate to the installation directory and type `npm install` into the console/terminal
 
-Step 2. Next, write `npm install mqtt` then `npm install mongoose`
+Step 2. Next, write `npm install mqtt`, `npm install mongoose`, `npm install jquery`, `npm install jsdom` and `npm install lodash.isequal`
 
 Step 3. When everything has finished installing, you can run the component by typing `node databaseHandler.js`
 
